@@ -1,0 +1,20 @@
+
+plugins {
+    id 'application' // run 명령이 들어있는 plug in
+    id 'java'
+    id 'eclipse'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13'
+
+    implementation 'com.google.guava:guava:29.0-jre'
+}
+
+application {
+    mainClass = 'com.eomcs.pms.App'
+}

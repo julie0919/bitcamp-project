@@ -1,10 +1,53 @@
 package com.eomcs.pms;
 
+import java.util.Scanner;
 public class App2 {
-  public static void main(String[] args) { 
-    System.out.println("[프로젝트]\n번호: 1201\n프로젝트명: 미니 프로젝트 관리 시스템 개발");
-    System.out.println("내용: 소규모 팀을 위한 프로젝트 관리 시스템을 개발한다.");
-    System.out.println("시작일: 2020-01-01\n종료일: 2020-12-31\n만든이: 홍길동");
-    System.out.println("팀원: 홍길동, 김구, 유관순, 안중근, 윤봉길");
+  public static void main(String[] args) {
+    final int SIZE = 3;
+
+    Scanner sc = new Scanner(System.in);
+    int[] id = new int[SIZE];
+    String[] name = new String[SIZE];
+    String[] content = new String[SIZE];
+    String[] start = new String[SIZE];
+    String[] end = new String[SIZE];
+    String[] writer = new String[SIZE];
+    String[] team = new String[SIZE];
+    int count = 0;
+
+    System.out.println("[프로젝트]");
+    for (int i =0; i < SIZE; i++) {
+      System.out.print("번호? ");
+      id[i] = sc.nextInt();
+      sc.nextLine();
+      System.out.print("프로젝트명? ");
+      name[i] = sc.nextLine();
+      System.out.print("내용? ");
+      content[i] = sc.nextLine();
+      System.out.print("시작일? ");
+      start[i] = sc.nextLine();
+      System.out.print("종료일? ");
+      end[i] = sc.nextLine();
+      System.out.print("만든이? ");
+      writer[i] = sc.nextLine();
+      System.out.print("팀원? ");
+      team[i] = sc.nextLine();
+      count++;
+
+      System.out.println();
+      System.out.print("계속 입력하시겠습니까?(y/N)");
+      String result = sc.nextLine();
+      if (result.length() == 0 || result.equalsIgnoreCase("n")) {
+        break;
+      }
+      System.out.println();
+    }
+
+    System.out.println("--------------------------------------------");
+    for (int i = 0; i < count; i++) {
+      System.out.printf("%d, %s, %s, %s, %s\n", id[i], name[i], start[i], end[i], writer[i]);
+    }
+    sc.close();
+
   }
 }

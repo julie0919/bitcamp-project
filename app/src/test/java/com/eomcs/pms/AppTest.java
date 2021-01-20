@@ -4,6 +4,7 @@
 package com.eomcs.pms;
 
 import org.junit.Test;
+import com.eomcs.pms.handler.App;
 import static org.junit.Assert.*;
 
 public class AppTest {

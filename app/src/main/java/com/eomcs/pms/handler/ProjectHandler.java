@@ -1,25 +1,15 @@
 package com.eomcs.pms.handler;
 
-import java.sql.Date;
+import com.eomcs.pms.domain.Project;
 import com.eomcs.util.Prompt;
 
 public class ProjectHandler {
 
-  static class Project {
-    int no;
-    String title;
-    String content;
-    Date startDate;
-    Date endDate;
-    String owner;
-    String members;  
-  }
-
   static final int LENGTH = 100;
-  static Project[] projects = new Project[LENGTH];
-  static int size = 0;
+  Project[] projects = new Project[LENGTH];
+  int size = 0;
 
-  public static void add() {
+  public void add(MemberHandler memberList) {
     System.out.println("[프로젝트 등록]");
 
     Project p = new Project();
@@ -30,37 +20,37 @@ public class ProjectHandler {
     p.endDate = Prompt.inputDate("종료일? ");
 
     while (true) {
-      String name = Prompt.inputString("만든이? (취소: 빈 문자열) ");
-      if (name.length() == 0){
+      String name = Prompt.inputString("만든이?(취소: 빈 문자열) ");
+      if (name.length() == 0) {
         System.out.println("프로젝트 등록을 취소합니다.");
-        return; // 메소드를 나감
-      }
-      if (MemberHandler.exist(name)) {
+        return;
+      } 
+      if (memberList.exist(name)) {
         p.owner = name;
         break;
       }
       System.out.println("등록된 회원이 아닙니다.");
     }
-    p.members = Prompt.inputString("팀원? ");
 
     p.members = "";
     while (true) {
-      String name = Prompt.inputString("팀원? (완료: 빈 문자열) ");
-      if (name.length() == 0){
+      String name = Prompt.inputString("팀원?(완료: 빈 문자열) ");
+      if (name.length() == 0) {
         break;
-      } else if (MemberHandler.exist(name)) {
+      } else if (memberList.exist(name)) {
         if (!p.members.isEmpty()) {
-          p.members += ","; //p.members = p.members + ",";
+          p.members += ",";
         }
-        p.members += name; // p.members = p.members + "," + name;
+        p.members += name;
       } else {
         System.out.println("등록된 회원이 아닙니다.");
       }
     }
+
     projects[size++] = p;
   }
 
-  public static void list() {
+  public void list() {
     System.out.println("[프로젝트 목록]");
 
     for (int i = 0; i < size; i++) {
@@ -70,6 +60,12 @@ public class ProjectHandler {
     }
   }
 
-
-
 }
+
+
+
+
+
+
+
+

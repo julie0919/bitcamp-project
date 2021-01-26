@@ -22,10 +22,22 @@ public class App {
     MemberHandler memberList = new MemberHandler();
 
     // 각 프로젝트 목록 데이터를 저장할 메모리 준비
-    ProjectHandler projectList = new ProjectHandler();
+    // - 생성자에서 MemberHandler 객체를 주입하라고 강요한다.
+    // - ProjectHandler 객체를 만드려면 반드시 주입해야한다.
+    ProjectHandler projectList = new ProjectHandler(memberList);
+
+    // ProjectHandler 가 의존하는 객체 (dependency)를 주입한다.
+    // add() 메서드를 호출할 때 마다 파라미터에 넘기는 대신에
+    // 계속 사용할 수 있도록 인스턴스 필드에 담아놓는다.
+    // projectList.memberList = memberList;
 
     // 각 작업 목록 데이터를 저장할 메모리 준비
-    TaskHandler taskList = new TaskHandler();
+    // - 생성자에서 MemberHandler 객체를 주입하라고 강요한다.
+    // - TaskHandler 객체를 만드려면 반드시 주입해야한다.
+    TaskHandler taskList = new TaskHandler(memberList);
+
+    // TaskHandler 가 사용할 의존 객체 (dependency)를 주입한다.
+    // taskList.memberList = memberList;
 
     loop:
       while (true) {
@@ -39,13 +51,13 @@ public class App {
             memberList.list();
             break;
           case "/project/add":
-            projectList.add(memberList);
+            projectList.add();
             break;
           case "/project/list":
             projectList.list();
             break;
           case "/task/add":
-            taskList.add(memberList);
+            taskList.add();
             break;
           case "/task/list":
             taskList.list();

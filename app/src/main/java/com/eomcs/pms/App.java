@@ -46,18 +46,42 @@ public class App {
           case "/member/list":
             memberList.list();
             break;
+          case "/member/detail":
+            memberList.detail();
+            break;
+          case "/member/update":
+            memberList.update();
+            break;
+          case "/member/delete":
+            memberList.delete();
           case "/project/add":
             projectList.add();
             break;
           case "/project/list":
             projectList.list();
             break;
+          case "/proejct/detail":
+            projectList.detail();
+            break;
+          case "/project/update":
+            projectList.update();
+            break;
+          case "/project/delete":
+            projectList.delete();
           case "/task/add":
             taskList.add();
             break;
           case "/task/list":
             taskList.list();
             break;
+          case "/task/detail":
+            taskList.detail();
+            break;
+          case "/task/update":
+            taskList.update();
+            break;
+          case "/task/delete":
+            taskList.delete();
           case "/board/add":
             boardList.add();
             break;

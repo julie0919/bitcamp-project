@@ -11,4 +11,3 @@ public class Member {
   public String tel;
   public Date registeredDate;  
 }
-

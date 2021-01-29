@@ -6,11 +6,10 @@ import com.eomcs.util.Prompt;
 
 public class BoardHandler {
 
-  //공통으로 사용하는 값은 스태틱 필드로 선언한다.
-  static final int LENGTH = 100;
+  static final int DEFAULT_CAPACITY = 3;
 
-  // 개별적으로 관리해야하는 값은 인스턴스 필드로 선언한다.
-  Board[] boards = new Board[LENGTH];   
+  Box firstBox;
+  Box lastBox;
   int size = 0;
 
   public void add() {
@@ -19,12 +18,23 @@ public class BoardHandler {
     Board b = new Board();
 
     b.no = Prompt.inputInt("번호? ");
-    b.title = Prompt.inputString("제목? ");
+    b.title = Prompt.inputString("제목? ");   
     b.content = Prompt.inputString("내용? ");
     b.writer = Prompt.inputString("작성자? ");
     b.registeredDate = new Date(System.currentTimeMillis());
 
-    this.boards[this.size++] = b;
+    Box box = new Box(b);
+
+    if (lastBox == null) { // 연결 리스트의 첫 항목이라면,
+      lastBox = box;
+      firstBox = box;
+    } else { // 연결리스트에 이미 항목이 있다면
+      lastBox.next = box; // 현재 마지막 상자의 다음 상자가 
+      box.prev = lastBox; // 새 상자의 이전 상자를 설정한다.
+      lastBox = box; // 새 상자가 마지막 상자가 되게 한다.
+    }
+
+    this.size++;
 
     System.out.println("게시글을 등록하였습니다.");
   }
@@ -32,11 +42,9 @@ public class BoardHandler {
   public void list() {
     System.out.println("[게시글 목록]");
 
-    for (int i = 0; i < this.size; i++) {
-      Board b = this.boards[i];
-
-      if (b == null)
-        continue; // 아래로 가지않고 다시 for문으로 돌아가 시작하고 i < this.size가 거짓이 될때까지 반복
+    Box cursor = firstBox;
+    while (cursor != null) {
+      Board b = cursor.board;
 
       // 번호, 제목, 등록일, 작성자, 조회수, 좋아요
       System.out.printf("%d, %s, %s, %s, %d, %d\n", 
@@ -46,6 +54,7 @@ public class BoardHandler {
           b.writer, 
           b.viewCount,
           b.like);
+      cursor = cursor.next;
     }
   }
 
@@ -59,12 +68,14 @@ public class BoardHandler {
       System.out.println("해당 번호의 게시글이 없습니다.");
       return;
     }
+
     board.viewCount++;
     System.out.printf("제목: %s\n", board.title);
     System.out.printf("내용: %s\n", board.content);
     System.out.printf("작성자: %s\n", board.writer);
     System.out.printf("등록일: %s\n", board.registeredDate);
     System.out.printf("조회수: %d\n", board.viewCount);
+
   }
 
   public void update() {
@@ -72,24 +83,22 @@ public class BoardHandler {
 
     int no = Prompt.inputInt("번호? ");
 
-
     Board board = findByNo(no);
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");
       return;
     }
-    // 아래 문장을 길게 쓰면 이거다 String promptCaption = "제목(" + board.title + ")? ";
-    //String str = Prompt.inputString(promptCaption);
-    // String promptCaption = String.format("제목(%s)?", board.title);
 
-    String title = Prompt.inputString(String.format("제목(%s)?", board.title));
-    String content = Prompt.inputString(String.format("내용(%s)?", board.content));
+    String title = Prompt.inputString(String.format("제목(%s)? ", board.title));
+    String content = Prompt.inputString(String.format("내용(%s)? ", board.content));
 
-    String input = Prompt.inputString(String.format("정말 변경하시겠습니까?(y/N)"));
+    String input = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
+
     if (input.equalsIgnoreCase("Y")) {
       board.title = title;
       board.content = content;
       System.out.println("게시글을 변경하였습니다.");
+
     } else {
       System.out.println("게시글 변경을 취소하였습니다.");
     }
@@ -100,42 +109,71 @@ public class BoardHandler {
 
     int no = Prompt.inputInt("번호? ");
 
-    int i = indexOf(no);
-    if (i == -1) {
+    Board board = findByNo(no);
+    if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");
       return;
     }
-    String input = Prompt.inputString(String.format("정말 삭제하시겠습니까?(y/N)"));
+
+    String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
 
     if (input.equalsIgnoreCase("Y")) {
-      for (int x = i + 1; x < this.size; x++) {
-        this.boards[x-1] = this.boards[x];
+      Box cursor = firstBox;
+      while (cursor != null) {
+        if (cursor.board == board) {
+          if (cursor == firstBox) {
+            firstBox = cursor.next;
+          } else {
+            cursor.prev.next = cursor.next;
+            cursor.prev = null; // 가비지가 된 객체가 기존 객체를 가리키지 않도록 만든다.
+            cursor.next = null; // 가비지가 된 객체가 기존 객체를 가리키지 않도록 만든다.
+          }
+          break;
+        }
       }
-      boards[--this.size] = null; // 앞으로 당긴 후 맨 뒤의 항목은 null로 설정한다. (가비지관리를 효율적으로 하기 위해서)
       System.out.println("게시글을 삭제하였습니다.");
+
     } else {
       System.out.println("게시글 삭제를 취소하였습니다.");
     }
+
   }
 
-  // 게시글 번호에 해당하는 인스턴스를 배열에서 찾아 그 인덱스를 리턴한다.
+  // 게시글 번호에 해당하는 인스턴스를 배열에서 찾아 그 인덱스를 리턴한다. 
   int indexOf(int boardNo) {
-    for (int i = 0; i < this.size; i++) {
-      Board board = this.boards[i];
-      if (board.no == boardNo) { // board != null && 이 조건은 삭제 후 앞으로 땅겨서 null을 없앴으니까 불필요
-        return i;
-      }
-    }
+    //    for (int i = 0; i < this.size; i++) {
+    //      Board board = this.boards[i];
+    //      if (board.no == boardNo) {
+    //        return i;
+    //      }
+    //    }
     return -1;
   }
 
   // 게시글 번호에 해당하는 인스턴스를 찾아 리턴한다.
   Board findByNo(int boardNo) {
-    int i = indexOf(boardNo);
-    if (i == -1)
-      return null;
-    else
-      return boards[i];
+
+    Box cursor = firstBox;
+    while (cursor != null) {
+      Board b = cursor.board;
+      if (b.no == boardNo) {
+        return b;
+      }
+      cursor = cursor.next;
+
+    }
+    return null;
+  }
+
+  static class Box {
+    Board board;
+    Box next;
+    Box prev;
+
+
+    Box(Board b) {
+      this.board = b;
+    }
   }
 }
 

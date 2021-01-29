@@ -1,5 +1,6 @@
 package com.eomcs.pms.handler;
 
+import java.util.Arrays;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
 
@@ -7,14 +8,14 @@ public class TaskHandler {
 
   static final int LENGTH = 100;
 
-  // 의존 객체 (dependency) 를 담을 인스턴스 필드
-  // 메서드가 작업할 때 사용할 객체를 담는다.
-  public MemberHandler memberList;
+  // 의존 객체(dependency)를 담을 인스턴스 필드
+  // - 메서드가 작업할 때 사용할 객체를 담는다.
+  MemberHandler memberList;
 
   Task[] tasks = new Task[LENGTH];
   int size = 0;
 
-  //생성자 정의
+  // 생성자
   // - TaskHandler가 의존하는 객체를 반드시 주입하도록 강요한다.
   // - 다른 패키지에서 생성자를 호출할 수 있도록 공개한다.
   public TaskHandler(MemberHandler memberHandler) {
@@ -42,7 +43,9 @@ public class TaskHandler {
         System.out.println("등록된 회원이 아닙니다.");
       }
     }
-
+    if (this.size >= this.tasks.length) {
+      this.tasks = Arrays.copyOf(this.tasks, this.size + (this.size >> 1));
+    }
     this.tasks[this.size++] = t;
   }
 
@@ -67,106 +70,4 @@ public class TaskHandler {
           t.no, t.content, t.deadline, stateLabel, t.owner);
     }
   }
-
-  public void detail() {
-    System.out.println("[작업 상세보기]");
-
-    int no = Prompt.inputInt("번호? ");
-
-    Task task = findByNo(no);
-    if (task == null) {
-      System.out.println("해당 번호의 작업이 없습니다.");
-      return;
-    }
-    System.out.printf("내용: %s\n", task.content);
-    System.out.printf("마감일: %s\n", task.deadline);
-
-    String stateLabel = null;
-    switch (task.status) {
-      case 1:
-        stateLabel = "진행중";
-        break;
-      case 2:
-        stateLabel = "완료";
-        break;
-      default:
-        stateLabel = "신규";
-    }
-
-    System.out.printf("상태: %s\n", stateLabel);
-
-    System.out.printf("담당자: %s\n", task.owner);   
-  }
-
-  public void update() {
-    System.out.println("[작업 변경]");
-
-    int no = Prompt.inputInt("번호? ");
-
-
-    Task task = findByNo(no);
-    if (task == null) {
-      System.out.println("해당 번호의 작업이 없습니다.");
-      return;
-    }
-
-    String content = Prompt.inputString(String.format("내용(%s)?", task.content));
-    int status = Prompt.inputInt(String.format("상태(%s)?", task.status));
-    String owner = Prompt.inputString(String.format("담당자(%s)?", task.owner));
-
-
-    String input = Prompt.inputString(String.format("정말 변경하시겠습니까?(y/N)"));
-    if (input.equalsIgnoreCase("Y")) {
-      task.content = content;
-      task.status = status;
-      task.owner = owner;
-
-      System.out.println("작업 정보를 변경하였습니다.");
-    } else {
-      System.out.println("작업 변경을 취소하였습니다.");
-    }
-  }
-
-  public void delete() {
-    System.out.println("[작업 삭제]");
-
-    int no = Prompt.inputInt("번호? ");
-
-    int i = indexOf(no);
-    if (i == -1) {
-      System.out.println("해당 번호의 작업이 없습니다.");
-      return;
-    }
-    String input = Prompt.inputString(String.format("정말 삭제하시겠습니까?(y/N)"));
-
-    if (input.equalsIgnoreCase("Y")) {
-      for (int x = i + 1; x < this.size; x++) {
-        this.tasks[x-1] = this.tasks[x];
-      }
-      tasks[--this.size] = null; // 앞으로 당긴 후 맨 뒤의 항목은 null로 설정한다. (가비지관리를 효율적으로 하기 위해서)
-      System.out.println("작업을 삭제하였습니다.");
-    } else {
-      System.out.println("작업 삭제를 취소하였습니다.");
-    }
-  }
-
-  int indexOf(int taskNo) {
-    for (int i = 0; i < this.size; i++) {
-      Task task = this.tasks[i];
-      if (task.no == taskNo) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  Task findByNo(int taskNo) {
-    int i = indexOf(taskNo);
-    if (i == -1)
-      return null;
-    else
-      return tasks[i];
-  }
-
-
 }

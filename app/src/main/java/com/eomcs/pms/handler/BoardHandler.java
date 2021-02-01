@@ -6,11 +6,7 @@ import com.eomcs.util.Prompt;
 
 public class BoardHandler {
 
-  static final int DEFAULT_CAPACITY = 3;
-
-  Box firstBox;
-  Box lastBox;
-  int size = 0;
+  BoardList boardList = new BoardList();
 
   public void add() {
     System.out.println("[게시글 등록]");
@@ -18,23 +14,12 @@ public class BoardHandler {
     Board b = new Board();
 
     b.no = Prompt.inputInt("번호? ");
-    b.title = Prompt.inputString("제목? ");   
+    b.title = Prompt.inputString("제목? ");
     b.content = Prompt.inputString("내용? ");
     b.writer = Prompt.inputString("작성자? ");
     b.registeredDate = new Date(System.currentTimeMillis());
 
-    Box box = new Box(b);
-
-    if (lastBox == null) { // 연결 리스트의 첫 항목이라면,
-      lastBox = box;
-      firstBox = box;
-    } else { // 연결리스트에 이미 항목이 있다면
-      lastBox.next = box; // 현재 마지막 상자의 다음 상자가 
-      box.prev = lastBox; // 새 상자의 이전 상자를 설정한다.
-      lastBox = box; // 새 상자가 마지막 상자가 되게 한다.
-    }
-
-    this.size++;
+    boardList.add(b);
 
     System.out.println("게시글을 등록하였습니다.");
   }
@@ -42,10 +27,8 @@ public class BoardHandler {
   public void list() {
     System.out.println("[게시글 목록]");
 
-    Box cursor = firstBox;
-    while (cursor != null) {
-      Board b = cursor.board;
-
+    Board[] boards = boardList.toArray();
+    for (Board b : boards) {
       // 번호, 제목, 등록일, 작성자, 조회수, 좋아요
       System.out.printf("%d, %s, %s, %s, %d, %d\n", 
           b.no, 
@@ -54,7 +37,6 @@ public class BoardHandler {
           b.writer, 
           b.viewCount,
           b.like);
-      cursor = cursor.next;
     }
   }
 
@@ -63,7 +45,7 @@ public class BoardHandler {
 
     int no = Prompt.inputInt("번호? ");
 
-    Board board = findByNo(no);
+    Board board = boardList.get(no);
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");
       return;
@@ -83,7 +65,7 @@ public class BoardHandler {
 
     int no = Prompt.inputInt("번호? ");
 
-    Board board = findByNo(no);
+    Board board = boardList.get(no);
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");
       return;
@@ -109,7 +91,7 @@ public class BoardHandler {
 
     int no = Prompt.inputInt("번호? ");
 
-    Board board = findByNo(no);
+    Board board = boardList.get(no);
     if (board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");
       return;
@@ -118,19 +100,8 @@ public class BoardHandler {
     String input = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
 
     if (input.equalsIgnoreCase("Y")) {
-      Box cursor = firstBox;
-      while (cursor != null) {
-        if (cursor.board == board) {
-          if (cursor == firstBox) {
-            firstBox = cursor.next;
-          } else {
-            cursor.prev.next = cursor.next;
-            cursor.prev = null; // 가비지가 된 객체가 기존 객체를 가리키지 않도록 만든다.
-            cursor.next = null; // 가비지가 된 객체가 기존 객체를 가리키지 않도록 만든다.
-          }
-          break;
-        }
-      }
+      boardList.delete(no);
+
       System.out.println("게시글을 삭제하였습니다.");
 
     } else {
@@ -139,42 +110,6 @@ public class BoardHandler {
 
   }
 
-  // 게시글 번호에 해당하는 인스턴스를 배열에서 찾아 그 인덱스를 리턴한다. 
-  int indexOf(int boardNo) {
-    //    for (int i = 0; i < this.size; i++) {
-    //      Board board = this.boards[i];
-    //      if (board.no == boardNo) {
-    //        return i;
-    //      }
-    //    }
-    return -1;
-  }
-
-  // 게시글 번호에 해당하는 인스턴스를 찾아 리턴한다.
-  Board findByNo(int boardNo) {
-
-    Box cursor = firstBox;
-    while (cursor != null) {
-      Board b = cursor.board;
-      if (b.no == boardNo) {
-        return b;
-      }
-      cursor = cursor.next;
-
-    }
-    return null;
-  }
-
-  static class Box {
-    Board board;
-    Box next;
-    Box prev;
-
-
-    Box(Board b) {
-      this.board = b;
-    }
-  }
 }
 
 

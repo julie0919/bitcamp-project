@@ -10,10 +10,10 @@ public class App {
 
   public static void main(String[] args) {
 
-    BoardHandler boardList = new BoardHandler();
-    MemberHandler memberList = new MemberHandler();
-    ProjectHandler projectList = new ProjectHandler(memberList);
-    TaskHandler taskList = new TaskHandler(memberList);
+    BoardHandler BoardHandler = new BoardHandler();
+    MemberHandler MemberHandler = new MemberHandler();
+    ProjectHandler ProjectHandler = new ProjectHandler(MemberHandler);
+    TaskHandler TaskHandler = new TaskHandler(MemberHandler);
 
 
     loop:
@@ -22,37 +22,64 @@ public class App {
 
         switch (command) {
           case "/member/add":
-            memberList.add();
+            MemberHandler.add();
             break;
           case "/member/list":
-            memberList.list();
+            MemberHandler.list();
+            break;
+          case "/member/detail":
+            MemberHandler.detail();
+            break;  
+          case "/member/update":
+            MemberHandler.update();
+            break; 
+          case "/member/delete":
+            MemberHandler.delete();
             break;
           case "/project/add":
-            projectList.add();
+            ProjectHandler.add();
             break;
           case "/project/list":
-            projectList.list();
+            ProjectHandler.list();
+            break;
+          case "/project/detail": 
+            ProjectHandler.detail();
+            break;  
+          case "/project/update":
+            ProjectHandler.update();
+            break; 
+          case "/project/delete":
+            ProjectHandler.delete();
             break;
           case "/task/add":
-            taskList.add();
+            TaskHandler.add();
             break;
           case "/task/list":
-            taskList.list();
+            TaskHandler.list();
+            break;
+          case "/task/detail": 
+            TaskHandler.detail();
+            break;  
+          case "/task/update":
+            TaskHandler.update();
+            break; 
+          case "/task/delete":
+            TaskHandler.delete();
             break;
           case "/board/add":
-            boardList.add();
+            BoardHandler.add();
             break;
           case "/board/list":
-            boardList.list();
+            BoardHandler.list();
             break;
           case "/board/detail":
-            boardList.detail();
+            BoardHandler.detail();
             break;  
           case "/board/update":
-            boardList.update();
+            BoardHandler.update();
             break; 
           case "/board/delete":
-            boardList.delete();
+            BoardHandler.delete();
             break;
           case "quit":
           case "exit":

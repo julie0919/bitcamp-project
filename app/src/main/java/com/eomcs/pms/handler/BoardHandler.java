@@ -8,7 +8,7 @@ import com.eomcs.util.Prompt;
 
 public class BoardHandler {
 
-  private List boardList = new List();
+  private List<Board> boardList = new List();
   public void add() {
     System.out.println("[게시글 등록]");
 
@@ -28,9 +28,28 @@ public class BoardHandler {
   public void list() throws CloneNotSupportedException  {
     System.out.println("[게시글 목록]");
 
-    Iterator iterator = boardList.iterator();
+    // 방법 1)
+    // Board[] arr = new Board[boardList.size()];
+    // boardList.toArray(arr);
+
+    // 방법 2)
+    //    Board[] arr = boardList.toArray(new Board[boardList.size()]);
+    //
+    //    for(Board b : arr) {
+    //      System.out.printf("%d, %s, %s, %s, %d, %d\n", 
+    //          b.getNo(), 
+    //          b.getTitle(), 
+    //          b.getRegisteredDate(), 
+    //          b.getWriter(), 
+    //          b.getViewCount(),
+    //          b.getLike());
+    //    }
+
+    // Iterator 사용하여 데이터 조회하기
+
+    Iterator<Board> iterator = boardList.iterator();
     while(iterator.hasNext()) {
-      Board b = (Board) iterator.next();
+      Board b = iterator.next();
       // 번호, 제목, 등록일, 작성자, 조회수, 좋아요
       System.out.printf("%d, %s, %s, %s, %d, %d\n", 
           b.getNo(), 
@@ -113,9 +132,8 @@ public class BoardHandler {
   }
 
   private Board findByNo(int boardNo) {
-    Object[] list= boardList.toArray();
-    for (Object obj : list) {
-      Board b = (Board) obj;
+    Board[] list = boardList.toArray(new Board[0]);
+    for (Board b : list) {
       if (b.getNo() == boardNo) {
         return b;
       }

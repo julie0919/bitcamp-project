@@ -11,6 +11,24 @@ public class Member {
   private String tel;
   private Date registeredDate;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s,%s,%s\n",
+        this.getNo(),this.getName(),this.getEmail(),this.getPassword(),this.getPhoto(),this.getTel(),this.getRegisteredDate());
+  }
+
+  public static Member valueOfCsv(String csv) {
+    String[] fields = csv.split(",");
+    Member m = new Member();
+    m.setNo(Integer.parseInt(fields[0]));
+    m.setName(fields[1]);
+    m.setEmail(fields[2]);
+    m.setPassword(fields[3]);
+    m.setPhoto(fields[4]);
+    m.setTel(fields[5]);
+    m.setRegisteredDate(Date.valueOf(fields[6]));
+    return m;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

@@ -11,6 +11,25 @@ public class Project {
   private String owner;
   private String members;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s,%s,%s\n",
+        this.getNo(),this.getTitle(),this.getContent(),this.getStartDate(),this.getEndDate(),this.getOwner(),this.getMembers().replace(",", "|"));
+  }
+
+  public static Project valueOfCsv(String csv) {
+    String[] fields = csv.split(",");
+    Project p = new Project();
+
+    p.setNo(Integer.parseInt(fields[0]));
+    p.setTitle(fields[1]);
+    p.setContent(fields[2]);
+    p.setStartDate(Date.valueOf(fields[3]));
+    p.setEndDate(Date.valueOf(fields[4]));
+    p.setOwner(fields[5]);
+    p.setMembers(fields[6].replace("|", ","));
+    return p;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

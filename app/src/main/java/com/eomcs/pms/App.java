@@ -1,16 +1,14 @@
 package com.eomcs.pms;
 
-import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
@@ -162,22 +160,10 @@ public class App {
   }
 
   static void loadBoards() {
-    try (Scanner in = new Scanner(new FileReader("boards.csv"))) {
-      while (true) {
-        try {
-          String record = in.nextLine();
-          String[] fields = record.split(","); // 번호, 제목, 내용, 작성자, 등록일, 조회수
-          Board b = new Board();
-          b.setNo(Integer.parseInt(fields[0]));
-          b.setTitle(fields[1]);
-          b.setContent(fields[2]);
-          b.setWriter(fields[3]);
-          b.setRegisteredDate(Date.valueOf(fields[4]));
-          b.setViewCount(Integer.parseInt(fields[5]));
-          boardList.add(b);
-        } catch (NoSuchElementException e) {
-          break;
-        }
+    try (BufferedReader in = new BufferedReader(new FileReader("boards.csv"))) {
+      String csvStr = null;
+      while ((csvStr = in.readLine()) != null) {
+        boardList.add(Board.valueOfCsv(csvStr));
       }
       System.out.println("게시글 데이터 로딩!");
 
@@ -187,15 +173,13 @@ public class App {
   }
 
   static void saveBoards() {
-    try (FileWriter out = new FileWriter("boards.csv")) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter("boards.csv"))) {
 
       // boards.csv 파일 포맷
       // - 번호, 제목, 내용, 작성자, 등록일, 조회수(CRLF)
 
       for (Board b : boardList) {
-        out.write(String.format("%d,%s,%s,%s,%s,%d\n", 
-            b.getNo(),b.getTitle(),b.getContent(),b.getWriter(),b.getRegisteredDate(),b.getViewCount()));
-
+        out.write(b.toCsvString() + "\n");
       }
       System.out.println("게시글 데이터 저장!");
 
@@ -206,26 +190,10 @@ public class App {
 
   static void loadMembers() {
 
-    try (Scanner in = new Scanner(new FileInputStream("members.csv"))) {
-
-      while (true) {
-
-        try {
-          String record = in.nextLine();
-          String[] fields = record.split(",");
-          Member m = new Member();
-          m.setNo(Integer.parseInt(fields[0]));
-          m.setName(fields[1]);
-          m.setEmail(fields[2]);
-          m.setPassword(fields[3]);
-          m.setPhoto(fields[4]);
-          m.setTel(fields[5]);
-          m.setRegisteredDate(Date.valueOf(fields[6]));
-
-          memberList.add(m);
-        } catch (NoSuchElementException e) {
-          break;
-        }
+    try (BufferedReader in = new BufferedReader(new FileReader("members.csv"))) {
+      String csvStr = null;
+      while ((csvStr = in.readLine()) != null) {
+        memberList.add(Member.valueOfCsv(csvStr));
       }
       System.out.println("회원 데이터 로딩!");
 
@@ -236,14 +204,13 @@ public class App {
 
   static void saveMembers() {
 
-    try (FileWriter out = new FileWriter("members.csv")) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter("members.csv"))) {
 
       // members.csv 파일 포맷
       // - 번호, 이름, 이메일, 비밀번호, 사진, 연락처, 등록일
 
       for (Member m : memberList) {
-        out.write(String.format("%d,%s,%s,%s,%s,%s,%s\n",
-            m.getNo(),m.getName(),m.getEmail(),m.getPassword(),m.getPhoto(),m.getTel(),m.getRegisteredDate()));
+        out.write(m.toCsvString() + "\n");
       }
       System.out.println("회원 데이터 저장!");
 
@@ -254,26 +221,11 @@ public class App {
 
   static void loadProjects() {
 
-    try (Scanner in = new Scanner(new FileInputStream("projects.csv"))) {
+    try (BufferedReader in = new BufferedReader(new FileReader("projects.csv"))) {
+      String csvStr = null;
 
-      while (true) {
-        try {
-          String record = in.nextLine();
-          String[] fields = record.split(",");
-          Project p = new Project();
-
-          p.setNo(Integer.parseInt(fields[0]));
-          p.setTitle(fields[1]);
-          p.setContent(fields[2]);
-          p.setStartDate(Date.valueOf(fields[3]));
-          p.setEndDate(Date.valueOf(fields[4]));
-          p.setOwner(fields[5]);
-          p.setMembers(fields[6].replace("|", ","));
-
-          projectList.add(p);
-        } catch (NoSuchElementException e) {
-          break;
-        }
+      while ((csvStr = in.readLine()) != null) {
+        projectList.add(Project.valueOfCsv(csvStr));
       }  
       System.out.println("프로젝트 데이터 로딩!");
 
@@ -284,10 +236,9 @@ public class App {
 
   static void saveProjects() {
 
-    try (FileWriter out = new FileWriter("projects.csv")) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter("projects.csv"))) {
       for (Project p : projectList) {
-        out.write(String.format("%d,%s,%s,%s,%s,%s,%s\n",
-            p.getNo(),p.getTitle(),p.getContent(),p.getStartDate(),p.getEndDate(),p.getOwner(),p.getMembers().replace(",", "|")));
+        out.write(p.toCsvString() + "\n");
       }
       System.out.println("프로젝트 데이터 저장!");
 
@@ -298,23 +249,11 @@ public class App {
 
   static void loadTasks() {
 
-    try (Scanner in = new Scanner(new FileInputStream("tasks.csv"))) {
-      while (true) {
-        try {
-          String record = in.nextLine();
-          String[] fields = record.split(",");
-          Task t = new Task();
+    try (BufferedReader in = new BufferedReader(new FileReader("tasks.csv"))) {
+      String csvStr = null;
+      while ((csvStr = in.readLine()) != null) {
 
-          t.setNo(Integer.parseInt(fields[0]));
-          t.setContent(fields[1]);
-          t.setDeadline(Date.valueOf(fields[3]));
-          t.setStatus(Integer.parseInt(fields[4]));
-          t.setOwner(fields[5]);
-
-          taskList.add(t);
-        } catch (NoSuchElementException e) {
-          break;
-        }
+        taskList.add(Task.valueOfCsv(csvStr));
       } 
       System.out.println("작업 데이터 로딩!");
 
@@ -325,10 +264,9 @@ public class App {
 
   static void saveTasks() {
 
-    try (FileWriter out = new FileWriter("tasks.csv")) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter("tasks.csv"))) {
       for (Task t : taskList) {
-        out.write(String.format("%d,%s,%s,%s,%s\n",
-            t.getNo(),t.getContent(),t.getDeadline(),t.getStatus(),t.getOwner()));
+        out.write(t.toCsvString() + "\n");
       }
       System.out.println("작업 데이터 저장!");
 

@@ -9,6 +9,23 @@ public class Task {
   private String owner;
   private int status;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s\n",
+        this.getNo(),this.getContent(),this.getDeadline(),this.getStatus(),this.getOwner());
+  }
+
+  public static Task valueOfCsv(String csv) {
+    String[] fields = csv.split(",");
+    Task t = new Task();
+
+    t.setNo(Integer.parseInt(fields[0]));
+    t.setContent(fields[1]);
+    t.setDeadline(Date.valueOf(fields[3]));
+    t.setStatus(Integer.parseInt(fields[4]));
+    t.setOwner(fields[5]);
+    return t;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

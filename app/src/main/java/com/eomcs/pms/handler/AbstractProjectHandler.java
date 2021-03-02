@@ -12,7 +12,7 @@ public abstract class AbstractProjectHandler implements Command {
   }
 
   protected Project findByNo(int projectNo) {
-    Project[] list= projectList.toArray(new Project[projectList.size()]);
+    Project[] list = projectList.toArray(new Project[projectList.size()]);
     for (Project p : list) {
       if (p.getNo() == projectNo) {
         return p;
@@ -20,7 +20,6 @@ public abstract class AbstractProjectHandler implements Command {
     }
     return null;
   }
-
 
 }
 

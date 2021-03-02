@@ -5,11 +5,12 @@ import java.util.List;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.util.Prompt;
 
-public class BoardSearchHandler extends AbstractBoardHandler{
+public class BoardSearchHandler extends AbstractBoardHandler {
 
   public BoardSearchHandler(List<Board> boardList) {
     super(boardList);
   }
+
   @Override
   public void service() {
     String keyword = Prompt.inputString("검색어? ");
@@ -49,6 +50,7 @@ public class BoardSearchHandler extends AbstractBoardHandler{
     }
 
   }
+
 }
 
 

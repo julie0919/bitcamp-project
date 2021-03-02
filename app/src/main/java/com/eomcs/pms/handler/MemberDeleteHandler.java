@@ -4,7 +4,7 @@ import java.util.List;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.util.Prompt;
 
-public class MemberDeleteHandler extends AbstractMemberHandler{
+public class MemberDeleteHandler extends AbstractMemberHandler {
 
   public MemberDeleteHandler(List<Member> memberList) {
     super(memberList);

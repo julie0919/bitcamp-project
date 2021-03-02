@@ -1,11 +1,8 @@
 package com.eomcs.pms.domain;
 
-import java.io.Serializable;
 import java.sql.Date;
 
-public class Task implements Serializable {
-  private static final long serialVersionUID = 1L;
-
+public class Task {
   private int no;
   private String content;
   private Date deadline;
@@ -21,6 +18,7 @@ public class Task implements Serializable {
     result = prime * result + no;
     return result;
   }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -44,6 +42,7 @@ public class Task implements Serializable {
       return false;
     return true;
   }
+
   public int getNo() {
     return no;
   }

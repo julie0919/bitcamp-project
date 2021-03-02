@@ -26,9 +26,9 @@ public class MemberValidatorHandler extends AbstractMemberHandler {
       if (name.length() == 0) {
         return null;
       } 
-      if (findByName(name) != null)
+      if (findByName(name) != null) {
         return name;
-
+      }
       System.out.println("등록된 회원이 아닙니다.");
     }
   }
@@ -46,17 +46,6 @@ public class MemberValidatorHandler extends AbstractMemberHandler {
         members += name;
       }
     }
-  }
-
-  private Member findByName(String name) {
-    Member[] list= memberList.toArray(new Member[memberList.size()]);
-    for (Object obj : list) {
-      Member m = (Member) obj;
-      if (m.getName().equals(name)) {
-        return m;
-      }
-    }
-    return null;
   }
 
 }

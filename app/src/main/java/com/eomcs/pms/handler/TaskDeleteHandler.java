@@ -6,7 +6,7 @@ import com.eomcs.util.Prompt;
 
 public class TaskDeleteHandler extends AbstractTaskHandler {
 
-  public TaskDeleteHandler (List<Task> taskList) {
+  public TaskDeleteHandler(List<Task> taskList) {
     super(taskList);
   }
 

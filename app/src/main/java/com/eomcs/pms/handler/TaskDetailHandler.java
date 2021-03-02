@@ -6,7 +6,7 @@ import com.eomcs.util.Prompt;
 
 public class TaskDetailHandler extends AbstractTaskHandler {
 
-  public TaskDetailHandler (List<Task> taskList) {
+  public TaskDetailHandler(List<Task> taskList) {
     super(taskList);
   }
 
@@ -28,5 +28,4 @@ public class TaskDetailHandler extends AbstractTaskHandler {
     System.out.printf("담당자: %s\n", task.getOwner());
 
   }
-
 }

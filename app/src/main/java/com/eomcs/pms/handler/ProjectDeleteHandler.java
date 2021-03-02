@@ -6,7 +6,7 @@ import com.eomcs.util.Prompt;
 
 public class ProjectDeleteHandler extends AbstractProjectHandler {
 
-  public ProjectDeleteHandler (List<Project> projectList) {
+  public ProjectDeleteHandler(List<Project> projectList) {
     super(projectList);
   }
 
@@ -18,7 +18,7 @@ public class ProjectDeleteHandler extends AbstractProjectHandler {
 
     Project project = findByNo(no);
     if (project == null) {
-      System.out.println("해당 번호의 프로젝트이 없습니다.");
+      System.out.println("해당 번호의 프로젝트가 없습니다.");
       return;
     }
 
@@ -26,7 +26,6 @@ public class ProjectDeleteHandler extends AbstractProjectHandler {
 
     if (input.equalsIgnoreCase("Y")) {
       projectList.remove(project);
-
       System.out.println("프로젝트을 삭제하였습니다.");
 
     } else {

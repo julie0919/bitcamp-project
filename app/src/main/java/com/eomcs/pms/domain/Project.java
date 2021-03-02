@@ -1,11 +1,8 @@
 package com.eomcs.pms.domain;
 
-import java.io.Serializable;
 import java.sql.Date;
 
-public class Project implements Serializable {
-  private static final long serialVersionUID = 1L;
-
+public class Project {
   private int no;
   private String title;
   private String content;
@@ -14,17 +11,17 @@ public class Project implements Serializable {
   private String owner;
   private String members;
 
-
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((content == null) ? 0 : content.hashCode());
-    result = prime * result + ((members == null) ? 0 : members.hashCode());
-    result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+    result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+    result = prime * result + no;
+    result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
     result = prime * result + ((title == null) ? 0 : title.hashCode());
     return result;
   }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -34,20 +31,17 @@ public class Project implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Project other = (Project) obj;
-    if (content == null) {
-      if (other.content != null)
+    if (endDate == null) {
+      if (other.endDate != null)
         return false;
-    } else if (!content.equals(other.content))
+    } else if (!endDate.equals(other.endDate))
       return false;
-    if (members == null) {
-      if (other.members != null)
-        return false;
-    } else if (!members.equals(other.members))
+    if (no != other.no)
       return false;
-    if (owner == null) {
-      if (other.owner != null)
+    if (startDate == null) {
+      if (other.startDate != null)
         return false;
-    } else if (!owner.equals(other.owner))
+    } else if (!startDate.equals(other.startDate))
       return false;
     if (title == null) {
       if (other.title != null)
@@ -56,6 +50,7 @@ public class Project implements Serializable {
       return false;
     return true;
   }
+
   public int getNo() {
     return no;
   }
@@ -98,7 +93,6 @@ public class Project implements Serializable {
   public void setMembers(String members) {
     this.members = members;
   }  
-
 
 
 }

@@ -6,7 +6,7 @@ import com.eomcs.util.Prompt;
 
 public class ProjectDetailHandler extends AbstractProjectHandler {
 
-  public ProjectDetailHandler (List<Project> projectList) {
+  public ProjectDetailHandler(List<Project> projectList) {
     super(projectList);
   }
 

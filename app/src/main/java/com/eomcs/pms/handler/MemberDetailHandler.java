@@ -6,7 +6,7 @@ import com.eomcs.util.Prompt;
 
 public class MemberDetailHandler extends AbstractMemberHandler {
 
-  public MemberDetailHandler (List<Member> memberList) {
+  public MemberDetailHandler(List<Member> memberList) {
     super(memberList);
   }
 

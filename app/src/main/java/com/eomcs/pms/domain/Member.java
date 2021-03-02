@@ -1,10 +1,8 @@
 package com.eomcs.pms.domain;
 
-import java.io.Serializable;
 import java.sql.Date;
 
-public class Member implements Serializable {
-  private static final long serialVersionUID = 1L;
+public class Member {
   private int no;
   private String name;
   private String email;
@@ -13,16 +11,16 @@ public class Member implements Serializable {
   private String tel;
   private Date registeredDate;
 
-
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((email == null) ? 0 : email.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((tel == null) ? 0 : tel.hashCode());
+    result = prime * result + no;
     return result;
   }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -42,13 +40,11 @@ public class Member implements Serializable {
         return false;
     } else if (!name.equals(other.name))
       return false;
-    if (tel == null) {
-      if (other.tel != null)
-        return false;
-    } else if (!tel.equals(other.tel))
+    if (no != other.no)
       return false;
     return true;
   }
+
   public int getNo() {
     return no;
   }
@@ -90,7 +86,7 @@ public class Member implements Serializable {
   }
   public void setRegisteredDate(Date registeredDate) {
     this.registeredDate = registeredDate;
-  }  
+  } 
 
 
 }

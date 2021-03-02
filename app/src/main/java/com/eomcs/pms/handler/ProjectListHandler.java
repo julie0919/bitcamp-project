@@ -6,7 +6,7 @@ import com.eomcs.pms.domain.Project;
 
 public class ProjectListHandler extends AbstractProjectHandler {
 
-  public ProjectListHandler (List<Project> projectList) {
+  public ProjectListHandler(List<Project> projectList) {
     super(projectList);
   }
 
@@ -16,7 +16,7 @@ public class ProjectListHandler extends AbstractProjectHandler {
 
     Iterator<Project> iterator = projectList.iterator();
 
-    while (iterator.hasNext()){
+    while (iterator.hasNext()) {
       Project p = iterator.next();
       System.out.printf("%d, %s, %s, %s, %s, [%s]\n",
           p.getNo(), p.getTitle(), p.getStartDate(), p.getEndDate(), p.getOwner(), p.getMembers());

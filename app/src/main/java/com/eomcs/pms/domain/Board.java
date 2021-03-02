@@ -12,6 +12,20 @@ public class Board implements CsvObject {
   private int viewCount;
   private int like;
 
+  public Board() {}
+
+  public Board (String csv) {
+    String[] fields = csv.split(",");
+
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setTitle(fields[1]);
+    this.setContent(fields[2]);
+    this.setWriter(fields[3]);
+    this.setRegisteredDate(Date.valueOf(fields[4]));
+    this.setViewCount(Integer.parseInt(fields[5]));
+
+  }
+
   @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%s,%d\n", 

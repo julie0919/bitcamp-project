@@ -12,6 +12,20 @@ public class Project implements CsvObject {
   private String owner;
   private String members;
 
+  public Project() {}
+
+  public Project(String csv) {
+    String[] fields = csv.split(",");
+
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setTitle(fields[1]);
+    this.setContent(fields[2]);
+    this.setStartDate(Date.valueOf(fields[3]));
+    this.setEndDate(Date.valueOf(fields[4]));
+    this.setOwner(fields[5]);
+    this.setMembers(fields[6].replace("|", ","));
+  }
+
   @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%s,%s,%s\n",

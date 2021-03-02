@@ -67,10 +67,10 @@ public class App {
 
 
     // 파일에서 데이터를 읽어온다.(데이터 로딩)
-    loadObjects(boardFile, boardList, Board::valueOfCsv);
-    loadObjects(memberFile, memberList, Member::valueOfCsv);
-    loadObjects(projectFile, projectList, Project::valueOfCsv);
-    loadObjects(taskFile, taskList, Task::valueOfCsv);
+    loadObjects(boardFile, boardList, Board::new);
+    loadObjects(memberFile, memberList, Member::new);
+    loadObjects(projectFile, projectList, Project::new);
+    loadObjects(taskFile, taskList, Task::new);
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();

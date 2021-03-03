@@ -27,6 +27,13 @@ public class Board implements CsvObject {
   }
 
   @Override
+  public String toString() {
+    return "Board [no=" + no + ", title=" + title + ", content=" + content + ", writer=" + writer
+        + ", registeredDate=" + registeredDate + ", viewCount=" + viewCount + ", like=" + like
+        + "]";
+  }
+
+  @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%s,%d\n", 
         this.getNo(),this.getTitle(),this.getContent(),this.getWriter(),this.getRegisteredDate(),this.getViewCount());
